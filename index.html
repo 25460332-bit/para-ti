@@ -16,11 +16,11 @@ body {
 
 .screen {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 30px;
+  justify-content: center;
+  gap: 20px;
   height: 100vh;
-  flex-wrap: wrap;
 }
 
 .hidden { display: none; }
@@ -33,7 +33,6 @@ body {
   color: white;
   font-size: 16px;
   cursor: pointer;
-  max-width: 250px;
 }
 
 input {
@@ -41,7 +40,6 @@ input {
   border-radius: 10px;
   border: none;
   margin-top: 10px;
-  text-align: center;
 }
 
 /* carta */
@@ -108,13 +106,10 @@ input {
 
 <!-- LOGIN -->
 <div class="screen" id="login">
-  <div>
-    <h1>💖 Solo para Kenia 💖</h1>
-    <input type="password" id="pass" placeholder="Contraseña">
-    <br>
-    <button class="btn" onclick="check()">Entrar 💌</button>
-    <p id="error" style="color:red;"></p>
-  </div>
+  <h1>💖 Solo para Kenia 💖</h1>
+  <input type="password" id="pass" placeholder="Contraseña">
+  <button class="btn" onclick="check()">Entrar 💌</button>
+  <p id="error" style="color:red;"></p>
 </div>
 
 <!-- CARTA -->
@@ -124,23 +119,21 @@ input {
     <div class="flap"></div>
     <div class="paper">
       <div id="texto"></div>
-
-      <!-- BOTÓN AUDIO -->
-      <button class="btn hidden" id="playAudioBtn" onclick="reproducirAudio()">
-        🎧 Reproducir mensaje 💖
-      </button>
-
-      <!-- AUDIO -->
-      <audio id="miAudio">
-        <source src="audio.mp3" type="audio/mpeg">
-      </audio>
-
     </div>
   </div>
+
+  <!-- BOTÓN AUDIO AFUERA -->
+  <button class="btn hidden" id="playAudioBtn" onclick="reproducirAudio()">
+    🎧 Reproducir mensaje 💖
+  </button>
 
   <button class="btn" onclick="reiniciarCarta()">
     💌 Posiblemente se te cerró sin que lo acabes de leer, presiónalo 💖
   </button>
+
+  <audio id="miAudio">
+    <source src="audio.mp3" type="audio/mpeg">
+  </audio>
 
 </div>
 
@@ -239,8 +232,7 @@ function reiniciarCarta() {
 }
 
 function reproducirAudio() {
-  const audio = document.getElementById("miAudio");
-  audio.play();
+  document.getElementById("miAudio").play();
 }
 
 /* corazones */
