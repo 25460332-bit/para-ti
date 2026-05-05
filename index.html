@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Kenia 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive;
+  background: linear-gradient(#ffc0cb, #ffe4ec);
+  overflow: hidden;
+  text-align: center;
+}
+
+.screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.hidden { display: none; }
+
+.btn {
+  background: #ff69b4;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 25px;
+  color: white;
+  font-size: 18px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+input {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* carta */
+.envelope {
+  width: 250px;
+  height: 180px;
+  background: #ff69b4;
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.flap {
+  position: absolute;
+  border-left: 125px solid transparent;
+  border-right: 125px solid transparent;
+  border-bottom: 90px solid #ff1493;
+  top: 0;
+  transform-origin: top;
+  transition: 0.6s;
+}
+
+.paper {
+  position: absolute;
+  width: 230px;
+  height: 160px;
+  background: white;
+  top: 10px;
+  left: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  transform: translateY(100px);
+  transition: 0.6s;
+  opacity: 0;
+  font-size: 14px;
+  overflow: auto;
+  text-align: left;
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+.envelope.open .paper {
+  transform: translateY(-20px);
+  opacity: 1;
+}
+
+/* corazones */
+.heart {
+  position: fixed;
+  color: #ff4d88;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-10vh); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="screen" id="login">
+  <h1>💖 Solo para Kenia 💖</h1>
+  <input type="password" id="pass" placeholder="Contraseña">
+  <button class="btn" onclick="check()">Entrar 💌</button>
+  <p id="error" style="color:red;"></p>
+</div>
+
+<!-- CARTA -->
+<div class="screen hidden" id="carta">
+  <h1>Kenia Hernández Evangelista 💖</h1>
+
+  <div class="envelope" onclick="abrirCarta(this)">
+    <div class="flap"></div>
+    <div class="paper">
+      <div id="texto"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const mensaje = `💖 La dueña de mi corazón ❤️ 💖
+
+No sabía cómo decir todo esto…
+pero quería que fuera especial, algo solo para ti 💕
+
+Desde que estás en mi vida, todo se siente diferente…
+más bonito, más tranquilo, más feliz ✨
+
+Eres alguien muy importante para mí
+y sinceramente no quiero perderte 💗
+
+💖 Eres la dueña de mi vida entera 💖`;
+
+function check() {
+  const pass = document.getElementById("pass").value;
+  
+  if (pass === "la dueña de mi vida entera") {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("carta").classList.remove("hidden");
+  } else {
+    document.getElementById("error").innerText = "Contraseña incorrecta 💔";
+  }
+}
+
+function abrirCarta(el) {
+  el.classList.toggle("open");
+  escribirTexto();
+}
+
+function escribirTexto() {
+  const contenedor = document.getElementById("texto");
+  contenedor.innerHTML = "";
+  let i = 0;
+
+  function escribir() {
+    if (i < mensaje.length) {
+      contenedor.innerHTML += mensaje.charAt(i);
+      i++;
+      setTimeout(escribir, 30);
+    }
+  }
+
+  escribir();
+}
+
+/* corazones */
+function crearCorazon() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}
+
+setInterval(crearCorazon, 300);
+</script>
+
+</body>
+</html>
