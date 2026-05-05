@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para Kenia 💖</title>
+<title>Para ti 💖</title>
 
 <style>
 body {
@@ -14,61 +14,53 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
+  text-align: center;
 }
 
+/* contenedores */
 .screen {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 
-.btn {
+/* input y botón */
+input {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+}
+
+button {
   background: #ff69b4;
   border: none;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border-radius: 20px;
   color: white;
   cursor: pointer;
 }
 
-input {
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
+/* texto */
+#contenido {
+  max-width: 600px;
+  font-size: 20px;
+  line-height: 1.5;
 }
 
-/* LIBRO */
-.book {
-  width: 600px;
-  height: 400px;
-  perspective: 1500px;
-  cursor: pointer;
+/* animación aparición */
+.fade {
+  opacity: 0;
+  animation: aparecer 2s forwards;
 }
 
-.page {
-  width: 100%;
-  height: 100%;
-  background: white;
-  position: absolute;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  transform-origin: left;
-  transition: transform 1s;
-}
-
-.book.open .page {
-  transform: rotateY(-180deg);
-}
-
-/* TEXTO */
-#texto {
-  font-size: 18px;
-  line-height: 1.4;
+@keyframes aparecer {
+  to { opacity: 1; }
 }
 
 /* corazones */
@@ -89,96 +81,79 @@ input {
 
 <!-- LOGIN -->
 <div class="screen" id="login">
-  <h1>💖 Solo para Kenia 💖</h1>
+  <h1>💖 Solo para ti 💖</h1>
   <input type="password" id="pass" placeholder="Contraseña">
-  <button class="btn" onclick="check()">Entrar 💌</button>
+  <button onclick="check()">Entrar</button>
   <p id="error" style="color:red;"></p>
 </div>
 
-<!-- LIBRO -->
-<div class="screen hidden" id="carta">
-  
-  <div class="book" onclick="abrirLibro(this)">
-    <div class="page">
-      <div id="texto"></div>
-    </div>
-  </div>
+<!-- CONTENIDO -->
+<div class="screen hidden" id="contenido">
 
-  <button class="btn hidden" id="playAudioBtn" onclick="reproducirAudio()">
-    🎧 Reproducir mensaje 💖
-  </button>
-
-  <audio id="miAudio" src="audio.mp3"></audio>
+  <h1 id="titulo"></h1>
+  <p id="texto"></p>
 
 </div>
 
 <script>
-const mensaje = `💖 La dueña de mi corazón ❤️ 💖
+const titulo = "Kenia Hernández Evangelista 💖";
 
-No sabía cómo decir todo esto...
-pero quería que fuera especial, algo solo para ti 💕
-
-Desde que estás en mi vida, todo se siente diferente...
-más bonito, más tranquilo, más feliz ✨
-
-Eres alguien muy importante para mí
-y sinceramente no quiero perderte 💗
-
-Eres la persona más importante en mi vida y te agradezco eternamente
-todos los momentos que pasas a mi lado, aun así sea algo básico
-o algo importante.
+const mensaje = `Eres la persona más importante en mi vida y te agradezco eternamente
+todos los momentos que pasas a mi lado, aun así sea algo básico o algo importante.
 
 Te quiero demasiado, te amo como a nadie más en la vida
-y quiero que entiendas que en mi corazón siempre quedarás marcada 💖
-
-💖 Eres la dueña de mi vida entera 💖`;
-
-let yaAbierto = false;
+y quiero que entiendas que en mi corazón siempre quedarás marcada 💖`;
 
 function check() {
   const pass = document.getElementById("pass").value;
-  
+
   if (pass === "la dueña de mi vida entera") {
     document.getElementById("login").classList.add("hidden");
-    document.getElementById("carta").classList.remove("hidden");
+    document.getElementById("contenido").classList.remove("hidden");
+
+    escribirTitulo();
   } else {
     document.getElementById("error").innerText = "Contraseña incorrecta 💔";
   }
 }
 
-function abrirLibro(el) {
-  if (yaAbierto) return;
-
-  yaAbierto = true;
-  el.classList.add("open");
-  escribirTexto();
-}
-
-function escribirTexto() {
-  const contenedor = document.getElementById("texto");
-  const botonAudio = document.getElementById("playAudioBtn");
-
+function escribirTitulo() {
+  const t = document.getElementById("titulo");
   let i = 0;
 
   function escribir() {
-    if (i < mensaje.length) {
-      if (mensaje.charAt(i) === "\n") {
-        contenedor.innerHTML += "<br>";
-      } else {
-        contenedor.innerHTML += mensaje.charAt(i);
-      }
+    if (i < titulo.length) {
+      t.innerHTML += titulo.charAt(i);
       i++;
-      setTimeout(escribir, 35);
+      setTimeout(escribir, 50);
     } else {
-      botonAudio.classList.remove("hidden");
+      t.classList.add("fade");
+      escribirTexto();
     }
   }
 
   escribir();
 }
 
-function reproducirAudio() {
-  document.getElementById("miAudio").play();
+function escribirTexto() {
+  const txt = document.getElementById("texto");
+  let i = 0;
+
+  function escribir() {
+    if (i < mensaje.length) {
+      if (mensaje.charAt(i) === "\n") {
+        txt.innerHTML += "<br>";
+      } else {
+        txt.innerHTML += mensaje.charAt(i);
+      }
+      i++;
+      setTimeout(escribir, 30);
+    } else {
+      txt.classList.add("fade");
+    }
+  }
+
+  escribir();
 }
 
 /* corazones */
