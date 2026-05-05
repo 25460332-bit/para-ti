@@ -18,8 +18,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 30px;
   height: 100vh;
-  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .hidden { display: none; }
@@ -27,12 +28,12 @@ body {
 .btn {
   background: #ff69b4;
   border: none;
-  padding: 15px 25px;
+  padding: 15px 20px;
   border-radius: 25px;
   color: white;
-  font-size: 18px;
-  margin-top: 15px;
+  font-size: 16px;
   cursor: pointer;
+  max-width: 250px;
 }
 
 input {
@@ -45,7 +46,7 @@ input {
 
 /* carta */
 .envelope {
-  width: 250px;
+  width: 260px;
   height: 180px;
   background: #ff69b4;
   position: relative;
@@ -55,8 +56,8 @@ input {
 
 .flap {
   position: absolute;
-  border-left: 125px solid transparent;
-  border-right: 125px solid transparent;
+  border-left: 130px solid transparent;
+  border-right: 130px solid transparent;
   border-bottom: 90px solid #ff1493;
   top: 0;
   transform-origin: top;
@@ -65,7 +66,7 @@ input {
 
 .paper {
   position: absolute;
-  width: 230px;
+  width: 240px;
   height: 160px;
   background: white;
   top: 10px;
@@ -107,37 +108,65 @@ input {
 
 <!-- LOGIN -->
 <div class="screen" id="login">
-  <h1>💖 Solo para Kenia 💖</h1>
-  <input type="password" id="pass" placeholder="Contraseña">
-  <button class="btn" onclick="check()">Entrar 💌</button>
-  <p id="error" style="color:red;"></p>
+  <div>
+    <h1>💖 Solo para Kenia 💖</h1>
+    <input type="password" id="pass" placeholder="Contraseña">
+    <br>
+    <button class="btn" onclick="check()">Entrar 💌</button>
+    <p id="error" style="color:red;"></p>
+  </div>
 </div>
 
 <!-- CARTA -->
 <div class="screen hidden" id="carta">
-  <h1>Kenia Hernández Evangelista 💖</h1>
-
+  
   <div class="envelope" onclick="abrirCarta(this)">
     <div class="flap"></div>
     <div class="paper">
       <div id="texto"></div>
+
+      <!-- BOTÓN AUDIO -->
+      <button class="btn hidden" id="playAudioBtn" onclick="reproducirAudio()">
+        🎧 Reproducir mensaje 💖
+      </button>
+
+      <!-- AUDIO -->
+      <audio id="miAudio">
+        <source src="audio.mp3" type="audio/mpeg">
+      </audio>
+
     </div>
   </div>
+
+  <button class="btn" onclick="reiniciarCarta()">
+    💌 Posiblemente se te cerró sin que lo acabes de leer, presiónalo 💖
+  </button>
+
 </div>
 
 <script>
 const mensaje = `💖 La dueña de mi corazón ❤️ 💖
 
-No sabía cómo decir todo esto…
+No sabía cómo decir todo esto...
 pero quería que fuera especial, algo solo para ti 💕
 
-Desde que estás en mi vida, todo se siente diferente…
+Desde que estás en mi vida, todo se siente diferente...
 más bonito, más tranquilo, más feliz ✨
 
 Eres alguien muy importante para mí
 y sinceramente no quiero perderte 💗
 
+Eres la persona más importante en mi vida y te agradezco eternamente
+todos los momentos que pasas a mi lado, aun así sea algo básico
+o algo importante.
+
+Te quiero demasiado, te amo como a nadie más en la vida
+y quiero que entiendas que en mi corazón siempre quedarás marcada 💖
+
 💖 Eres la dueña de mi vida entera 💖`;
+
+let escribiendo = false;
+let timeoutActual;
 
 function check() {
   const pass = document.getElementById("pass").value;
@@ -152,23 +181,66 @@ function check() {
 
 function abrirCarta(el) {
   el.classList.toggle("open");
-  escribirTexto();
+
+  if (el.classList.contains("open")) {
+    iniciarEscritura();
+  } else {
+    detenerEscritura();
+  }
 }
 
-function escribirTexto() {
+function iniciarEscritura() {
   const contenedor = document.getElementById("texto");
+  const botonAudio = document.getElementById("playAudioBtn");
+
   contenedor.innerHTML = "";
+  botonAudio.classList.add("hidden");
+
   let i = 0;
+  escribiendo = true;
 
   function escribir() {
+    if (!escribiendo) return;
+
     if (i < mensaje.length) {
-      contenedor.innerHTML += mensaje.charAt(i);
+      if (mensaje.charAt(i) === "\n") {
+        contenedor.innerHTML += "<br>";
+      } else {
+        contenedor.innerHTML += mensaje.charAt(i);
+      }
       i++;
-      setTimeout(escribir, 30);
+      timeoutActual = setTimeout(escribir, 40);
+    } else {
+      botonAudio.classList.remove("hidden");
     }
   }
 
   escribir();
+}
+
+function detenerEscritura() {
+  escribiendo = false;
+  clearTimeout(timeoutActual);
+}
+
+function reiniciarCarta() {
+  const carta = document.querySelector(".envelope");
+  const contenedor = document.getElementById("texto");
+  const botonAudio = document.getElementById("playAudioBtn");
+
+  carta.classList.remove("open");
+  contenedor.innerHTML = "";
+  botonAudio.classList.add("hidden");
+
+  setTimeout(() => {
+    carta.classList.add("open");
+    iniciarEscritura();
+  }, 300);
+}
+
+function reproducirAudio() {
+  const audio = document.getElementById("miAudio");
+  audio.play();
 }
 
 /* corazones */
